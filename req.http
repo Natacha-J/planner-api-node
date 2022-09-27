@@ -1,1 +1,1 @@
-GET https://vast-forest-99690.herokuapp.com/api
+GET http://localhost:5000/api/recipes

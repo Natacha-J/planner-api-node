@@ -16,7 +16,7 @@ interface RecipeInstance extends Model<RecipeAttributes, RecipeCreationAttribute
 //Ingredient Model
 interface IngredientAttributes {
     id: number,
-    name: string,
+    name: string
 }
 interface IngredientCreationAttributes extends Optional<IngredientAttributes, 'id'> {}
 
@@ -40,14 +40,73 @@ interface RecipeIngredientsInstance extends Model<RecipeIngredientsAttributes>,
 //Category Model
 interface CategoryAttributes {
     id: number,
-    name: string,
+    name: string
 }
 interface CategoryCreationAttributes extends Optional<CategoryAttributes, 'id'> {}
 
 interface CategoryInstance extends Model<CategoryAttributes, CategoryCreationAttributes>,
     CategoryAttributes{
         createdAt?: Date,
-        updatedAt?: Date,
+        updatedAt?: Date
     }
 
-export { RecipeInstance, IngredientInstance, RecipeIngredientsInstance, CategoryInstance }
+//Measure Model
+interface MeasureAttributes {
+    id: number,
+    name: string
+}
+interface MeasureCreationAttributes extends Optional<MeasureAttributes, 'id'> {}
+
+interface MeasureInstance extends Model<MeasureAttributes, MeasureCreationAttributes>,
+    MeasureAttributes{
+        createdAt?: Date,
+        updatedAt?: Date
+    }
+
+//Stock Model
+interface StockAttributes {
+    id: number
+}
+
+interface StockCreationAttributes extends Optional<StockAttributes, 'id'> {}
+
+interface StockInstance extends Model<StockAttributes, StockCreationAttributes>,
+    StockAttributes{
+        createdAt?: Date,
+        updatedAt?: Date,
+        UserId: number
+    }
+
+//ShoppingList Model
+interface ShoppingListAttributes {
+    id: number
+}
+
+interface ShoppingListCreationAttributes extends Optional<ShoppingListAttributes, 'id'> {}
+
+interface ShoppingListInstance extends Model<ShoppingListAttributes, ShoppingListCreationAttributes>,
+    ShoppingListAttributes{
+        createdAt?: Date,
+        updatedAt?: Date,
+        UserId: number
+    }    
+
+//User Model
+interface UserAttributes {
+    id: number,
+    pseudo: string,
+    email: string,
+    password: string
+}
+
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
+interface UserInstance extends Model<UserAttributes, UserCreationAttributes>,
+    UserAttributes{
+        createdAt?: Date,
+        updatedAt?: Date,
+        ShoppingListId: number,
+        StockId: number
+    }
+
+export { RecipeInstance, IngredientInstance, RecipeIngredientsInstance, CategoryInstance, MeasureInstance, StockInstance, ShoppingListInstance, UserInstance}

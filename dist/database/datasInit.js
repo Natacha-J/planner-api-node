@@ -22,46 +22,50 @@ const categories = [
         name: 'poissons'
     }
 ];
+const measures = [
+    {
+        name: 'g.'
+    },
+    {
+        name: 'ml.'
+    },
+    {
+        name: 'pièce'
+    },
+    {
+        name: 'tranche'
+    }
+];
 const ingredients = [
     {
         name: 'carotte',
-        CategoryId: 1
+        CategoryId: 1,
+        MeasureId: 1
     },
     {
         name: 'pomme de terre',
-        CategoryId: 1
+        CategoryId: 1,
+        MeasureId: 1
     },
     {
         name: 'fromage râpé',
-        CategoryId: 3
-    },
-    {
-        name: 'sauce tomate',
-        CategoryId: 1
+        CategoryId: 3,
+        MeasureId: 1
     },
     {
         name: 'steack haché',
-        CategoryId: 5
-    },
-    {
-        name: 'béchamel',
-        CategoryId: 6
-    },
-    {
-        name: 'jambon',
-        CategoryId: 5
+        CategoryId: 5,
+        MeasureId: 1
     },
     {
         name: 'pâtes',
-        CategoryId: 2
+        CategoryId: 2,
+        MeasureId: 1
     },
     {
         name: 'riz',
-        CategoryId: 2
-    },
-    {
-        name: 'blé',
-        CategoryId: 2
+        CategoryId: 2,
+        MeasureId: 1
     },
 ];
 const recipes = [
@@ -103,4 +107,4 @@ const recipes = [
             title: 'hachi parmentier'
         } */
 ];
-module.exports = { categories, ingredients, recipes };
+module.exports = { categories, ingredients, recipes, measures };
