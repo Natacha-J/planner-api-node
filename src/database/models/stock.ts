@@ -10,7 +10,7 @@ const Stock = sequelize.define<StockInstance>(
             primaryKey: true,
             autoIncrement: true
         }
-    }
+    }, { timestamps: false }
 )
 
 module.exports = ( Stock )

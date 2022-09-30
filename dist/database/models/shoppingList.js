@@ -8,5 +8,5 @@ const ShoppingList = dbAccess_1.default.define("ShoppingList", {
         primaryKey: true,
         autoIncrement: true
     }
-});
+}, { timestamps: false });
 module.exports = (ShoppingList);

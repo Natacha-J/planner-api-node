@@ -6,9 +6,6 @@
     "strict": true
   },
   "include": [
-    "src/server.ts",
-    "src/database/**/*",
-    "src/helpers/*",
-    "src/routes/**/*"
+    "src/**/*"
   ]
 }

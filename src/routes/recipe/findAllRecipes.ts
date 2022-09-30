@@ -1,22 +1,27 @@
 import { Express, Request, Response } from "express"
+const auth = require('../../auth/auth')
 import { RecipeInstance } from "../../types/modelsType"
-const { RecipeModel, IngredientModel, RecipeIngredients } = require('../../database/dbInit')
+const { RecipeModel, IngredientModel, UserModel } = require('../../database/dbInit')
 
 module.exports = (app: Express) => {
-    app.get('/api/recipes', (req:Request, res: Response) => {
+    app.get('/api/recipes', auth, (req:Request, res: Response) => {
         RecipeModel.findAll({
             attributes: [
                 'id',
-                'title'
+                'title',
             ],
             include: [
                 {
+                    model: UserModel,
+                    attributes: ['id','pseudo']
+                },
+                {
                     model: IngredientModel,
-                    attributes: [ 'name'],
+                    attributes: ['name'],
                     through: {
                         attributes: ['quantity']
                     }
-                },
+                }
             ]
         })
             .then((recipes: RecipeInstance[]) => {

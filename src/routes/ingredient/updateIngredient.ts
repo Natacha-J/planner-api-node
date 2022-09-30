@@ -1,10 +1,12 @@
 import { Express, Request, Response } from "express"
-import { ValidationError } from 'sequelize';
+const auth = require('../../auth/auth')
+import { ForeignKeyConstraintError, ValidationError } from 'sequelize';
+const { collectErrors } = require('../../helpers/errorsTab')
 import { IngredientInstance } from "../../types/modelsType"
 const { IngredientModel } = require('../../database/dbInit')
 
 module.exports = (app: Express) => {
-    app.put('/api/ingredients/:id', (req: Request, res: Response) => {
+    app.put('/api/ingredients/:id', auth,(req: Request, res: Response) => {
         IngredientModel.update(req.body, {
             where: {
                 id: req.params.id
@@ -18,15 +20,24 @@ module.exports = (app: Express) => {
                     return res.status(404).send({ msg: msg });
                 }
                 const msg = `L'ingrédient ${ ingredient.name } a bien été modifiée.`;
-                res.send({ msg: msg, ingredient: ingredient });
+                res.send({ 
+                    msg: msg,
+                    ingredient: {
+                        id: ingredient.id,
+                        name: ingredient.name,
+                        CategoryId: ingredient.CategoryId,
+                        MeasureId: ingredient.MeasureId
+                    }
+                });
             })
         })
-        .catch((err: Error) => {
+        .catch((err : Error) => {
             if( err instanceof ValidationError){
-                let errorsTab: string[] = [];
-                err.errors.map( (e: any) => {
-                    errorsTab.push(e.message);
-                })
+                const errorsTab = collectErrors(err)
+                return res.status(400).send({ msg: errorsTab });
+            }
+            if( err instanceof ForeignKeyConstraintError){
+                const errorsTab = collectErrors(err)
                 return res.status(400).send({ msg: errorsTab });
             }
             const msg = `Une erreur est survenue : ${ err }`;

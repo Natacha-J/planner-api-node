@@ -1,11 +1,12 @@
 import { Express, Request, Response } from "express"
+const auth = require('../../auth/auth')
 import { ValidationError } from "sequelize"
 import { RecipeIngredientsInstance, RecipeInstance } from "../../types/modelsType"
 const { collectErrors } = require('../../helpers/errorsTab')
 const { RecipeModel, IngredientModel, RecipeIngredients } = require('../../database/dbInit')
 
 module.exports = (app: Express) => {
-    app.put('/api/recipes/:id', (req: Request, res: Response) => {
+    app.put('/api/recipes/:id', auth, (req: Request, res: Response) => {
         RecipeModel.update(req.body, {
             where: {
                 id: req.params.id
@@ -36,7 +37,7 @@ module.exports = (app: Express) => {
                 include: [
                     {
                         model: IngredientModel,
-                        attributes: [ 'name'],
+                        attributes: ['name'],
                         through: {
                             attributes: ['quantity']
                         }
@@ -49,7 +50,10 @@ module.exports = (app: Express) => {
                     return res.status(404).send({ msg: msg });
                 }
                 const msg = `La recette ${ recipe.title } a bien été modifiée.`;
-                res.send({ msg: msg, recipe: recipe });
+                res.send({ msg: msg, recipe: {
+                    id: recipe.id,
+                    title: recipe.title,
+                }});
             })
         })
         .catch((err : Error) => {

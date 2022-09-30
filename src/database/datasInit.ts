@@ -41,17 +41,17 @@ const ingredients = [
     {
         name: 'carotte',
         CategoryId: 1,
-        MeasureId : 1
+        MeasureId: 3
     },
     {
         name: 'pomme de terre',
         CategoryId: 1,
-        MeasureId : 1
+        MeasureId :3
     },
     {
         name: 'fromage râpé',
         CategoryId: 3,
-        MeasureId : 1
+        MeasureId :1
     },
     {
         name: 'steack haché',
@@ -70,10 +70,17 @@ const ingredients = [
     },
 
 ]
-
+const users = [
+    {
+        pseudo: 'Natacha',
+        email: 'njidkoff@hotmail.fr',
+        password: 'admin'
+    }
+]
 const recipes = [
     {
         title: 'purée de carottes',
+        UserId: 1,
         ingredients: [
             {
                 quantity: 2,
@@ -111,4 +118,4 @@ const recipes = [
     } */
 ]
 
-module.exports = { categories, ingredients, recipes, measures }
+module.exports = { categories, ingredients, recipes, measures, users }

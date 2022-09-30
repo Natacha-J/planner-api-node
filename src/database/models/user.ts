@@ -13,6 +13,10 @@ const User = sequelize.define<UserInstance>(
         pseudo: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: {
+                name: 'true',
+                msg : `Ce pseudo est déjà pris.`,
+            },
             validate: {
                 len: {
                     args: [3,60],
@@ -24,6 +28,10 @@ const User = sequelize.define<UserInstance>(
         email: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: {
+                name: 'true',
+                msg : `Cet e-mail est déjà enregistré.`,
+            },
             validate: {
                 notNull: { msg: `Un e-mail doit être renseigné.`}
             }

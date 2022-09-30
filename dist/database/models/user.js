@@ -11,6 +11,10 @@ const User = dbAccess_1.default.define("User", {
     pseudo: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
+        unique: {
+            name: 'true',
+            msg: `Ce pseudo est déjà pris.`,
+        },
         validate: {
             len: {
                 args: [3, 60],
@@ -22,6 +26,10 @@ const User = dbAccess_1.default.define("User", {
     email: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
+        unique: {
+            name: 'true',
+            msg: `Cet e-mail est déjà enregistré.`,
+        },
         validate: {
             notNull: { msg: `Un e-mail doit être renseigné.` }
         }

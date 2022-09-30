@@ -20,5 +20,5 @@ const Ingredient = dbAccess_1.default.define("Ingredient", {
             notNull: { msg: `Un nom est obligatoire.` }
         }
     }
-});
+}, { timestamps: false });
 module.exports = (Ingredient);

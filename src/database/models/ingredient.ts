@@ -22,7 +22,7 @@ const Ingredient = sequelize.define<IngredientInstance>(
                 notNull: { msg: `Un nom est obligatoire.`}
             }
         }
-    }
+    }, { timestamps: false }
 )
 
 module.exports = ( Ingredient )

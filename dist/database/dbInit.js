@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const dbAccess_1 = require("./dbAccess");
+const bcrypt = require('bcrypt');
 const sequelize_1 = require("sequelize");
 //model init
 const RecipeModel = require('./models/recipe');
@@ -15,6 +16,7 @@ const { ingredients } = require('./datasInit');
 const { categories } = require('./datasInit');
 const { recipes } = require('./datasInit');
 const { measures } = require('./datasInit');
+const { users } = require('./datasInit');
 //transition tables
 const RecipeIngredients = dbAccess_1.default.define('RecipeIngredients', {
     quantity: {
@@ -30,10 +32,14 @@ const ShoppingListIngredients = dbAccess_1.default.define('ShoppingListIngredien
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
         validate: {
-            notNull: { msg: `Une quantité est obligatoire.` }
+            notNull: { msg: `Une quantité est obligatoire.` },
+            min: {
+                args: [1],
+                msg: `Le nom de la catégorie doit contenir entre 3 et 40 caractères.`
+            }
         }
     }
-});
+}, { timestamps: false });
 const StockIngredients = dbAccess_1.default.define('StockIngredients', {
     quantity: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -42,7 +48,7 @@ const StockIngredients = dbAccess_1.default.define('StockIngredients', {
             notNull: { msg: `Une quantité est obligatoire.` }
         }
     }
-});
+}, { timestamps: false });
 //**entities associations**//
 //Recipes associations
 RecipeModel.belongsToMany(IngredientModel, {
@@ -51,7 +57,7 @@ RecipeModel.belongsToMany(IngredientModel, {
 RecipeModel.belongsTo(UserModel, {
     foreignKey: {
         fieldName: 'UserId',
-        allowNull: false,
+        allowNull: true,
         validate: {
             notNull: { msg: `Une recette doit avoir un auteur.` }
         }
@@ -59,7 +65,7 @@ RecipeModel.belongsTo(UserModel, {
 });
 //Ingredient associations
 IngredientModel.belongsToMany(RecipeModel, {
-    through: 'RecipeIngredients'
+    through: 'RecipeIngredients',
 });
 IngredientModel.belongsTo(CategoryModel, {
     foreignKey: {
@@ -83,16 +89,26 @@ IngredientModel.belongsToMany(StockModel, {
     through: 'StockIngredients'
 });
 IngredientModel.belongsToMany(ShoppingListModel, {
-    through: 'ShoppingListIngredients'
+    through: 'ShoppingListIngredients',
 });
-//Category associations
+//Category association
 CategoryModel.hasMany(IngredientModel);
 //User associations
 UserModel.hasMany(RecipeModel);
 UserModel.hasOne(StockModel);
 UserModel.hasOne(ShoppingListModel);
-//Measure associations
+//Measure association
 MeasureModel.hasMany(IngredientModel);
+//Stock associations
+StockModel.belongsToMany(IngredientModel, {
+    through: 'StockIngredients'
+});
+StockModel.belongsTo(UserModel);
+//ShoppingList associations
+ShoppingListModel.belongsToMany(IngredientModel, {
+    through: 'ShoppingListIngredients',
+});
+ShoppingListModel.belongsTo(UserModel);
 const initDb = () => {
     return dbAccess_1.default.sync({ force: true })
         .then(() => {
@@ -108,19 +124,33 @@ const initDb = () => {
                 name: category.name
             });
         });
-    });
-    /*    .then(() => {
-            ingredients.map((ingredient: IngredientInstance) => {
-                IngredientModel.create({
-                    name: ingredient.name,
-                    CategoryId: ingredient.CategoryId
-                })
-            })
-        })
+    })
         .then(() => {
+        users.map((user) => {
+            bcrypt.hash(user.password, 10)
+                .then((hash) => {
+                UserModel.create({
+                    pseudo: user.pseudo,
+                    email: user.email,
+                    password: hash
+                });
+            });
+        });
+    })
+        .finally(() => {
+        ingredients.map((ingredient) => {
+            IngredientModel.create({
+                name: ingredient.name,
+                CategoryId: ingredient.CategoryId,
+                MeasureId: ingredient.MeasureId
+            });
+        });
+    });
+    /*     .finally(() => {
             recipes.map((recipe: any) => {
                 RecipeModel.create({
-                    title: recipe.title
+                    title: recipe.title,
+                    UserId: recipe.UserId
                 })
                 .then((data: any) => {
                     recipes.map((recipe:any) => {

@@ -1,10 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const auth = require('../../auth/auth');
 const { IngredientModel, CategoryModel } = require('../../database/dbInit');
 module.exports = (app) => {
-    app.get('/api/ingredients', (req, res) => {
+    app.get('/api/ingredients', auth, (req, res) => {
         if (req.query.category) {
             return IngredientModel.findAll({
+                attributes: [
+                    'id',
+                    'name',
+                ],
                 include: [{
                         model: CategoryModel,
                         where: {
@@ -21,7 +26,12 @@ module.exports = (app) => {
                 res.send({ msg: msg, ingredients: ingredients });
             });
         }
-        IngredientModel.findAll()
+        IngredientModel.findAll({
+            attributes: [
+                'id',
+                'name',
+            ]
+        })
             .then((ingredients) => {
             const msg = `Voici la liste des ingrédients.`;
             res.send({ msg: msg, ingredients: ingredients });

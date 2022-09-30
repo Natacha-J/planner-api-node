@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { IngredientModel, CategoryModel } = require('../../database/dbInit');
+const auth = require('../../auth/auth');
+const { IngredientModel } = require('../../database/dbInit');
 module.exports = (app) => {
-    app.delete('/api/ingredients/:id', (req, res) => {
+    app.delete('/api/ingredients/:id', auth, (req, res) => {
         IngredientModel.findByPk(req.params.id)
             .then((ingredient) => {
             if (ingredient === null) {
@@ -16,7 +17,15 @@ module.exports = (app) => {
             })
                 .then(() => {
                 const msg = `L'ingrédient ${ingredient.name} a bien été supprimé.`;
-                res.send({ msg: msg, ingredient: ingredient });
+                res.send({
+                    msg: msg,
+                    ingredient: {
+                        id: ingredient.id,
+                        name: ingredient.name,
+                        CategoryId: ingredient.CategoryId,
+                        MeasureId: ingredient.MeasureId
+                    }
+                });
             })
                 .catch((err) => {
                 const msg = `Une erreur est survenue : ${err}`;

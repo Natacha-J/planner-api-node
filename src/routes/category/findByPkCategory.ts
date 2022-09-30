@@ -1,14 +1,10 @@
 import { Express, Request, Response } from 'express'
+const auth = require('../../auth/auth')
 import { CategoryInstance } from '../../types/modelsType'
 const { CategoryModel } = require('../../database/dbInit') 
 module.exports = (app: Express) => {
-    app.get('/api/categories/:id', (req: Request, res: Response) => {
-        CategoryModel.findByPk(req.params.id, {
-            attributes: [
-                'id',
-                'name'
-            ]
-        })
+    app.get('/api/categories/:id', auth, (req: Request, res: Response) => {
+        CategoryModel.findByPk(req.params.id)
         .then((category: CategoryInstance) => {
             if (category === null) {
                 const msg = `Il n'y a pas de catégorie à afficher.`;

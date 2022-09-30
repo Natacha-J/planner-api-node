@@ -21,7 +21,7 @@ const Category = sequelize.define<CategoryInstance>(
                 notNull: { msg: `Un nom de catégorie est obligatoire.`}
             }
         },
-    }
+    }, { timestamps: false }
 )
 
 module.exports = ( Category )

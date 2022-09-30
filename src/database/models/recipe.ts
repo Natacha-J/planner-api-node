@@ -13,6 +13,10 @@ const Recipe = sequelize.define<RecipeInstance>(
         title: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: {
+                name: 'true',
+                msg : `Une recette utilise déjà ce titre.`
+            },
             validate: {
                 len: {
                     args: [3,60],
@@ -21,7 +25,7 @@ const Recipe = sequelize.define<RecipeInstance>(
                 notNull: { msg: `Un titre est obligatoire.`}
             }
         }
-    }
+    }, { timestamps: false }
 )
 
 module.exports = ( Recipe )

@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const auth = require('../../auth/auth');
 const sequelize_1 = require("sequelize");
+const { collectErrors } = require('../../helpers/errorsTab');
 const { CategoryModel } = require('../../database/dbInit');
 module.exports = (app) => {
-    app.post('/api/categories', (req, res) => {
+    app.post('/api/categories', auth, (req, res) => {
         CategoryModel.create({
             name: req.body.name,
         })
@@ -13,10 +15,7 @@ module.exports = (app) => {
         })
             .catch((err) => {
             if (err instanceof sequelize_1.ValidationError) {
-                let errorsTab = [];
-                err.errors.map((e) => {
-                    errorsTab.push(e.message);
-                });
+                const errorsTab = collectErrors(err);
                 return res.status(400).send({ msg: errorsTab });
             }
             const msg = `Une erreur est survenue : ${err}`;

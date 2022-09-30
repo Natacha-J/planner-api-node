@@ -1,9 +1,10 @@
 import { Express, Request, Response } from "express"
+const auth = require('../../auth/auth')
 import { CategoryInstance } from "../../types/modelsType"
 const { CategoryModel } = require('../../database/dbInit')
 
 module.exports = (app: Express) => {
-    app.delete('/api/categories/:id', (req: Request, res: Response) => {
+    app.delete('/api/categories/:id', auth, (req: Request, res: Response) => {
         CategoryModel.findByPk(req.params.id)
         .then((category: CategoryInstance) => {
             if(category === null){
@@ -11,9 +12,7 @@ module.exports = (app: Express) => {
                 return res.status(404).send({ msg: msg });
             }
             CategoryModel.destroy({
-                where: {
-                    id: category.id
-                }
+                where: { id: category.id }
             })
             .then(() => {
                 const msg = `La catégorie ${category.name} a bien été supprimée.`;

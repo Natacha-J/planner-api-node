@@ -1,16 +1,12 @@
 import { Express, Request, Response } from "express"
+const auth = require('../../auth/auth')
 import { CategoryInstance } from "../../types/modelsType"
 const { CategoryModel } = require('../../database/dbInit')
 
 module.exports = (app: Express) => {
-    app.get('/api/categories', (req: Request, res: Response) => {
+    app.get('/api/categories', auth,(req: Request, res: Response) => {
         if(req.query.category){
-            return CategoryModel.findAll({
-                attributes: [
-                    'id',
-                    'name'
-                ]
-            })
+            return CategoryModel.findAll()
             .then((categories: CategoryInstance[]) => {                
                 if (categories.length === 0) {
                     const msg = `Il n'y a aucune catégorie ${ req.query.category }.`

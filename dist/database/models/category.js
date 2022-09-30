@@ -19,5 +19,5 @@ const Category = dbAccess_1.default.define("Category", {
             notNull: { msg: `Un nom de catégorie est obligatoire.` }
         }
     },
-});
+}, { timestamps: false });
 module.exports = (Category);

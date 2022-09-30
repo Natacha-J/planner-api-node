@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const auth = require('../../auth/auth');
 const { RecipeModel } = require('../../database/dbInit');
 module.exports = (app) => {
-    app.delete('/api/recipes/:id', (req, res) => {
+    app.delete('/api/recipes/:id', auth, (req, res) => {
         RecipeModel.findByPk(req.params.id)
             .then((recipe) => {
             if (recipe === null) {
@@ -16,7 +17,7 @@ module.exports = (app) => {
             })
                 .then(() => {
                 const msg = `La recette ${recipe.title} a bien été supprimée.`;
-                res.send({ msg: msg, cookingDish: recipe });
+                res.send({ msg: msg, recipe: { id: recipe.id, title: recipe.title } });
             });
         })
             .catch((err) => {

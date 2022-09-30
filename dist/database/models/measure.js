@@ -18,6 +18,6 @@ const Measure = dbAccess_1.default.define("Measure", {
             },
             notNull: { msg: `Un nom de mesure est obligatoire.` }
         }
-    },
-});
+    }
+}, { timestamps: false });
 module.exports = (Measure);

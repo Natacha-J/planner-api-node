@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const auth = require('../../auth/auth');
 const sequelize_1 = require("sequelize");
 const { collectErrors } = require('../../helpers/errorsTab');
 const { RecipeModel, IngredientModel, RecipeIngredients } = require('../../database/dbInit');
 module.exports = (app) => {
-    app.put('/api/recipes/:id', (req, res) => {
+    app.put('/api/recipes/:id', auth, (req, res) => {
         RecipeModel.update(req.body, {
             where: {
                 id: req.params.id
@@ -48,7 +49,10 @@ module.exports = (app) => {
                     return res.status(404).send({ msg: msg });
                 }
                 const msg = `La recette ${recipe.title} a bien été modifiée.`;
-                res.send({ msg: msg, recipe: recipe });
+                res.send({ msg: msg, recipe: {
+                        id: recipe.id,
+                        title: recipe.title,
+                    } });
             });
         })
             .catch((err) => {

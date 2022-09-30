@@ -1,15 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const auth = require('../../auth/auth');
 const { CategoryModel } = require('../../database/dbInit');
 module.exports = (app) => {
-    app.get('/api/categories', (req, res) => {
+    app.get('/api/categories', auth, (req, res) => {
         if (req.query.category) {
-            return CategoryModel.findAll({
-                attributes: [
-                    'id',
-                    'name'
-                ]
-            })
+            return CategoryModel.findAll()
                 .then((categories) => {
                 if (categories.length === 0) {
                     const msg = `Il n'y a aucune catégorie ${req.query.category}.`;

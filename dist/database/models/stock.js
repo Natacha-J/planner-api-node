@@ -8,5 +8,5 @@ const Stock = dbAccess_1.default.define("Stock", {
         primaryKey: true,
         autoIncrement: true
     }
-});
+}, { timestamps: false });
 module.exports = (Stock);

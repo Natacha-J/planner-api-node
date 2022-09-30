@@ -1,6 +1,7 @@
 import sequelize  from './dbAccess'
+const bcrypt = require('bcrypt')
 import { DataTypes } from 'sequelize'
-import { CategoryInstance, IngredientInstance, MeasureInstance, RecipeInstance } from '../types/modelsType';
+import { CategoryInstance, IngredientInstance, MeasureInstance, RecipeInstance, UserInstance } from '../types/modelsType';
 
 //model init
 const RecipeModel = require('./models/recipe');
@@ -17,6 +18,7 @@ const { ingredients } = require('./datasInit')
 const { categories } = require('./datasInit')
 const { recipes } = require('./datasInit')
 const { measures } = require('./datasInit')
+const { users} = require('./datasInit')
 
 //transition tables
 const RecipeIngredients = sequelize.define('RecipeIngredients', {
@@ -34,10 +36,14 @@ const ShoppingListIngredients = sequelize.define('ShoppingListIngredients', {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-            notNull: { msg : `Une quantité est obligatoire.` }
-        }
+            notNull: { msg : `Une quantité est obligatoire.` },
+            min: {
+                args: [1],
+                msg: `Le nom de la catégorie doit contenir entre 3 et 40 caractères.`
+            }
+        }       
     }
-})
+}, { timestamps: false })
 
 const StockIngredients = sequelize.define('StockIngredients', {
     quantity: {
@@ -47,7 +53,7 @@ const StockIngredients = sequelize.define('StockIngredients', {
             notNull: { msg : `Une quantité est obligatoire.` }
         }
     }    
-})
+}, { timestamps: false })
 
 //**entities associations**//
 //Recipes associations
@@ -57,7 +63,7 @@ RecipeModel.belongsToMany(IngredientModel, {
 RecipeModel.belongsTo(UserModel, {
     foreignKey: {
         fieldName: 'UserId',
-        allowNull: false,
+        allowNull: true,
         validate: {
             notNull: { msg : `Une recette doit avoir un auteur.`}
         }
@@ -66,7 +72,7 @@ RecipeModel.belongsTo(UserModel, {
 
 //Ingredient associations
 IngredientModel.belongsToMany(RecipeModel, {
-    through: 'RecipeIngredients'
+    through: 'RecipeIngredients',
 })
 IngredientModel.belongsTo(CategoryModel, {
     foreignKey: {
@@ -90,10 +96,10 @@ IngredientModel.belongsToMany(StockModel, {
     through: 'StockIngredients'
 })
 IngredientModel.belongsToMany(ShoppingListModel, {
-    through: 'ShoppingListIngredients'
+    through: 'ShoppingListIngredients',
 })
 
-//Category associations
+//Category association
 CategoryModel.hasMany(IngredientModel)
 
 //User associations
@@ -101,9 +107,20 @@ UserModel.hasMany(RecipeModel)
 UserModel.hasOne(StockModel)
 UserModel.hasOne(ShoppingListModel)
 
-//Measure associations
+//Measure association
 MeasureModel.hasMany(IngredientModel)
 
+//Stock associations
+StockModel.belongsToMany(IngredientModel, {
+    through: 'StockIngredients'
+})
+StockModel.belongsTo(UserModel)
+
+//ShoppingList associations
+ShoppingListModel.belongsToMany(IngredientModel, {
+    through: 'ShoppingListIngredients',
+})
+ShoppingListModel.belongsTo(UserModel)
 
 const initDb = () => {
     return sequelize.sync({force: true})
@@ -121,18 +138,32 @@ const initDb = () => {
             })
         })
     })
-/*    .then(() => {
-        ingredients.map((ingredient: IngredientInstance) => {
-            IngredientModel.create({
-                name: ingredient.name,
-                CategoryId: ingredient.CategoryId
+    .then(() => {
+        users.map((user: UserInstance) => {
+            bcrypt.hash(user.password, 10)
+            .then((hash: string) => {
+                UserModel.create({
+                    pseudo: user.pseudo,
+                    email: user.email,
+                    password: hash
+                })
             })
         })
     })
-    .then(() => {
+    .finally(() => {
+        ingredients.map((ingredient: IngredientInstance) => {
+            IngredientModel.create({
+                name: ingredient.name,
+                CategoryId: ingredient.CategoryId,
+                MeasureId: ingredient.MeasureId
+            })
+        })
+    })
+/*     .finally(() => {
         recipes.map((recipe: any) => {
             RecipeModel.create({
-                title: recipe.title
+                title: recipe.title,
+                UserId: recipe.UserId
             })
             .then((data: any) => {
                 recipes.map((recipe:any) => {

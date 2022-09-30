@@ -1,5 +1,5 @@
 import { Model, Optional } from "sequelize";
-
+//**models**/
 //Recipe Model
 interface RecipeAttributes {
     id: number,
@@ -24,17 +24,8 @@ interface IngredientInstance extends Model<IngredientAttributes, IngredientCreat
     IngredientAttributes {
         createdAt?: Date,
         updatedAt?: Date,
-        CategoryId: number
-    }
-
-//RecipeIngredients Model
-interface RecipeIngredientsAttributes {
-    quantity: number,
-}
-interface RecipeIngredientsInstance extends Model<RecipeIngredientsAttributes>,
-    RecipeIngredientsAttributes {
-        RecipeId: number,
-        IngredientId: number
+        CategoryId: number,
+        MeasureId: number
     }
 
 //Category Model
@@ -108,5 +99,51 @@ interface UserInstance extends Model<UserAttributes, UserCreationAttributes>,
         ShoppingListId: number,
         StockId: number
     }
+//**associations tables**/
+//RecipeIngredients Model
+interface RecipeIngredientsAttributes {
+    quantity: number,
+}
+interface RecipeIngredientsInstance extends Model<RecipeIngredientsAttributes>,
+    RecipeIngredientsAttributes {
+        RecipeId: number,
+        IngredientId: number,
+        UserId: number
+    }
 
-export { RecipeInstance, IngredientInstance, RecipeIngredientsInstance, CategoryInstance, MeasureInstance, StockInstance, ShoppingListInstance, UserInstance}
+//ShoppingListIngredients Model
+interface ShoppingListIngredientsAttributes {
+    quantity: number,
+    ListId: number,
+    IngredientId: number,
+}
+interface ShoppingListIngredientsInstance extends Model<ShoppingListIngredientsAttributes>,
+    ShoppingListIngredientsAttributes {
+        createdAt?: Date,
+        updatedAt?: Date,
+    }
+
+//StockIngredients Model
+interface StockIngredientsAttributes {
+    quantity: number,
+    StockId: number,
+    IngredientId: number,
+}
+interface StockIngredientsInstance extends Model<StockIngredientsAttributes>,
+    StockIngredientsAttributes {
+        createdAt?: Date,
+        updatedAt?: Date,
+    }
+
+export {
+    RecipeInstance,
+    IngredientInstance,
+    RecipeIngredientsInstance,
+    CategoryInstance,
+    MeasureInstance,
+    StockInstance,
+    ShoppingListInstance,
+    UserInstance,
+    ShoppingListIngredientsInstance,
+    StockIngredientsInstance
+}

@@ -1,11 +1,16 @@
 import { Express, Request, Response } from "express"
+const auth = require('../../auth/auth')
 import { IngredientInstance } from "../../types/modelsType"
 const { IngredientModel, CategoryModel } = require('../../database/dbInit')
 
 module.exports = (app: Express) => {
-    app.get('/api/ingredients', (req: Request, res: Response) => {
+    app.get('/api/ingredients', auth,(req: Request, res: Response) => {
         if(req.query.category){
             return IngredientModel.findAll({
+                attributes: [
+                    'id',
+                    'name',
+                ],
                 include: [{
                     model: CategoryModel,
                     where: {
@@ -22,7 +27,12 @@ module.exports = (app: Express) => {
                 res.send({ msg: msg, ingredients: ingredients })
             })
         }
-        IngredientModel.findAll()
+        IngredientModel.findAll({
+            attributes: [
+                'id',
+                'name',
+            ]
+        })
             .then((ingredients: IngredientInstance) => {
                 const msg = `Voici la liste des ingrédients.`
                 res.send({ msg: msg, ingredients: ingredients })

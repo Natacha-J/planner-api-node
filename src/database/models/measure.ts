@@ -20,8 +20,8 @@ const Measure = sequelize.define<MeasureInstance>(
                 },
                 notNull: { msg: `Un nom de mesure est obligatoire.`}
             }
-        },
-    }
+        }
+    }, { timestamps: false }
 )
 
 module.exports = ( Measure )
