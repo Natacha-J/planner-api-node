@@ -4,7 +4,7 @@
   "description": "meal planner developed in full javascript",
   "main": "server.js",
   "scripts": {
-    "start": "SET NODE_ENV=production & node dist/server.js",
+    "start": "node dist/server.js",
     "watch": "SET NODE_ENV=development & concurrently \"tsc --watch\" \"nodemon dist/server.js\"",
     "watch-client": "cd client && npm start",
     "build-client": "cd client && npm run build"
