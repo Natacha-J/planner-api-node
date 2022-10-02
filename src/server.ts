@@ -1,5 +1,4 @@
 import { Express, Request, Response } from "express";
-import path = require("path");
 const db = require('./database/dbInit');
 
 const express = require('express');
