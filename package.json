@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "watch": "SET NODE_ENV=development & concurrently \"tsc --watch\" \"nodemon dist/server.js\"",
+    "watch": "concurrently \"tsc --watch\" \"nodemon dist/server.js\"",
     "watch-client": "cd client && npm start",
     "build-client": "cd client && npm run build"
   },

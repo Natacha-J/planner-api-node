@@ -12,11 +12,11 @@ const StockModel = require('./models/stock');
 const ShoppingListModel = require('./models/shoppingList');
 const UserModel = require('./models/user');
 //datas initialization
-const { ingredients } = require('./datasInit');
-const { categories } = require('./datasInit');
-const { recipes } = require('./datasInit');
-const { measures } = require('./datasInit');
-const { users } = require('./datasInit');
+/* const { ingredients } = require('./datasInit')
+const { categories } = require('./datasInit')
+const { recipes } = require('./datasInit')
+const { measures } = require('./datasInit')
+const { users} = require('./datasInit') */
 //transition tables
 const RecipeIngredients = dbAccess_1.default.define('RecipeIngredients', {
     quantity: {
@@ -110,42 +110,42 @@ ShoppingListModel.belongsToMany(IngredientModel, {
 });
 ShoppingListModel.belongsTo(UserModel);
 const initDb = () => {
-    return dbAccess_1.default.sync({ force: true })
+    return dbAccess_1.default.sync( /* {force: true} */);
+    /*      .then(() => {
+            measures.map((measure: MeasureInstance) => {
+                MeasureModel.create({
+                    name: measure.name
+                })
+            })
+        })
         .then(() => {
-        measures.map((measure) => {
-            MeasureModel.create({
-                name: measure.name
-            });
-        });
-    })
+            categories.map((category: CategoryInstance) => {
+                CategoryModel.create({
+                    name: category.name
+                })
+            })
+        })
         .then(() => {
-        categories.map((category) => {
-            CategoryModel.create({
-                name: category.name
-            });
-        });
-    })
-        .then(() => {
-        users.map((user) => {
-            bcrypt.hash(user.password, 10)
-                .then((hash) => {
-                UserModel.create({
-                    pseudo: user.pseudo,
-                    email: user.email,
-                    password: hash
-                });
-            });
-        });
-    })
+            users.map((user: UserInstance) => {
+                bcrypt.hash(user.password, 10)
+                .then((hash: string) => {
+                    UserModel.create({
+                        pseudo: user.pseudo,
+                        email: user.email,
+                        password: hash
+                    })
+                })
+            })
+        })
         .finally(() => {
-        ingredients.map((ingredient) => {
-            IngredientModel.create({
-                name: ingredient.name,
-                CategoryId: ingredient.CategoryId,
-                MeasureId: ingredient.MeasureId
-            });
-        });
-    });
+            ingredients.map((ingredient: IngredientInstance) => {
+                IngredientModel.create({
+                    name: ingredient.name,
+                    CategoryId: ingredient.CategoryId,
+                    MeasureId: ingredient.MeasureId
+                })
+            })
+        }) */
     /*     .finally(() => {
             recipes.map((recipe: any) => {
                 RecipeModel.create({
