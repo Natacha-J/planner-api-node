@@ -14,11 +14,11 @@ const UserModel = require('./models/user')
 
 
 //datas initialization
-const { ingredients } = require('./datasInit')
+/* const { ingredients } = require('./datasInit')
 const { categories } = require('./datasInit')
 const { recipes } = require('./datasInit')
 const { measures } = require('./datasInit')
-const { users} = require('./datasInit')
+const { users} = require('./datasInit') */
 
 //transition tables
 const RecipeIngredients = sequelize.define('RecipeIngredients', {
@@ -123,8 +123,8 @@ ShoppingListModel.belongsToMany(IngredientModel, {
 ShoppingListModel.belongsTo(UserModel)
 
 const initDb = () => {
-    return sequelize.sync({force: true})
-     .then(() => {
+    return sequelize.sync(/* {force: true} */)
+/*      .then(() => {
         measures.map((measure: MeasureInstance) => {
             MeasureModel.create({
                 name: measure.name
@@ -158,7 +158,7 @@ const initDb = () => {
                 MeasureId: ingredient.MeasureId
             })
         })
-    })
+    }) */
 /*     .finally(() => {
         recipes.map((recipe: any) => {
             RecipeModel.create({
