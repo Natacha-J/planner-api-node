@@ -14,11 +14,11 @@ const UserModel = require('./models/user')
 
 
 //datas initialization
+const { users } = require('./datasInit') 
 /* const { ingredients } = require('./datasInit')
 const { categories } = require('./datasInit')
 const { recipes } = require('./datasInit')
-const { measures } = require('./datasInit')
-const { users} = require('./datasInit') */
+const { measures } = require('./datasInit')*/
 
 //transition tables
 const RecipeIngredients = sequelize.define('RecipeIngredients', {
@@ -124,6 +124,18 @@ ShoppingListModel.belongsTo(UserModel)
 
 const initDb = () => {
     return sequelize.sync(/* {force: true} */)
+    .then(() => {
+        users.map((user: UserInstance) => {
+            bcrypt.hash(user.password, 10)
+            .then((hash: string) => {
+                UserModel.create({
+                    pseudo: user.pseudo,
+                    email: user.email,
+                    password: hash
+                })
+            })
+        })
+    })
 /*      .then(() => {
         measures.map((measure: MeasureInstance) => {
             MeasureModel.create({
@@ -135,18 +147,6 @@ const initDb = () => {
         categories.map((category: CategoryInstance) => {
             CategoryModel.create({
                 name: category.name
-            })
-        })
-    })
-    .then(() => {
-        users.map((user: UserInstance) => {
-            bcrypt.hash(user.password, 10)
-            .then((hash: string) => {
-                UserModel.create({
-                    pseudo: user.pseudo,
-                    email: user.email,
-                    password: hash
-                })
             })
         })
     })

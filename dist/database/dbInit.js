@@ -12,11 +12,11 @@ const StockModel = require('./models/stock');
 const ShoppingListModel = require('./models/shoppingList');
 const UserModel = require('./models/user');
 //datas initialization
+const { users } = require('./datasInit');
 /* const { ingredients } = require('./datasInit')
 const { categories } = require('./datasInit')
 const { recipes } = require('./datasInit')
-const { measures } = require('./datasInit')
-const { users} = require('./datasInit') */
+const { measures } = require('./datasInit')*/
 //transition tables
 const RecipeIngredients = dbAccess_1.default.define('RecipeIngredients', {
     quantity: {
@@ -110,7 +110,19 @@ ShoppingListModel.belongsToMany(IngredientModel, {
 });
 ShoppingListModel.belongsTo(UserModel);
 const initDb = () => {
-    return dbAccess_1.default.sync( /* {force: true} */);
+    return dbAccess_1.default.sync( /* {force: true} */)
+        .then(() => {
+        users.map((user) => {
+            bcrypt.hash(user.password, 10)
+                .then((hash) => {
+                UserModel.create({
+                    pseudo: user.pseudo,
+                    email: user.email,
+                    password: hash
+                });
+            });
+        });
+    });
     /*      .then(() => {
             measures.map((measure: MeasureInstance) => {
                 MeasureModel.create({
@@ -122,18 +134,6 @@ const initDb = () => {
             categories.map((category: CategoryInstance) => {
                 CategoryModel.create({
                     name: category.name
-                })
-            })
-        })
-        .then(() => {
-            users.map((user: UserInstance) => {
-                bcrypt.hash(user.password, 10)
-                .then((hash: string) => {
-                    UserModel.create({
-                        pseudo: user.pseudo,
-                        email: user.email,
-                        password: hash
-                    })
                 })
             })
         })
