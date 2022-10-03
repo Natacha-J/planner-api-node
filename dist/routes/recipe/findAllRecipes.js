@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const auth = require('../../auth/auth');
-const { RecipeModel, IngredientModel, UserModel } = require('../../database/dbInit');
+const { RecipeModel, IngredientModel, UserModel, MeasureModel } = require('../../database/dbInit');
 module.exports = (app) => {
     app.get('/api/recipes', auth, (req, res) => {
         RecipeModel.findAll({
@@ -19,6 +19,10 @@ module.exports = (app) => {
                     attributes: ['name'],
                     through: {
                         attributes: ['quantity']
+                    },
+                    include: {
+                        model: MeasureModel,
+                        attributes: ['id', 'name']
                     }
                 }
             ]
