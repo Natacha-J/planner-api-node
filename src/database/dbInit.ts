@@ -120,7 +120,7 @@ ShoppingListModel.belongsTo(UserModel)
 
 const initDb = () => {
     return sequelize.sync(/* {force: true} */)
-    .then(() => {
+/*     .then(() => {
         users.map((user: UserInstance) => {
             bcrypt.hash(user.password, 10)
             .then((hash: string) => {
@@ -131,7 +131,7 @@ const initDb = () => {
                 })
             })
         })
-    })
+    }) */
 }
 
 module.exports = { initDb, RecipeModel, IngredientModel, CategoryModel, MeasureModel, StockModel, ShoppingListModel, UserModel, RecipeIngredients, StockIngredients, ShoppingListIngredients}
