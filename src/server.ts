@@ -1,12 +1,14 @@
 import { Express, Request, Response } from "express";
+const cors = require('cors')
 const db = require('./database/dbInit');
-
 const express = require('express');
 
 const app: Express = express();
 const port: number | string = process.env.PORT || 5000;
 
-app.use(express.json())
+app
+    .use(express.json())
+    .use(cors())
 
 db.initDb()
 

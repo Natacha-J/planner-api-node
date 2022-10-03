@@ -1,7 +1,7 @@
 import { Express, Request, Response } from "express"
 const auth = require('../../auth/auth')
 import { IngredientInstance } from "../../types/modelsType"
-const { IngredientModel, CategoryModel } = require('../../database/dbInit')
+const { IngredientModel, CategoryModel, MeasureModel } = require('../../database/dbInit')
 
 module.exports = (app: Express) => {
     app.get('/api/ingredients', auth,(req: Request, res: Response) => {
@@ -31,6 +31,16 @@ module.exports = (app: Express) => {
             attributes: [
                 'id',
                 'name',
+            ],
+            include: [
+                {
+                model: CategoryModel,
+                attributs: [ 'id', 'name']
+                },
+                {
+                    model: MeasureModel,
+                    attributs: [ 'id', 'name']
+                }
             ]
         })
             .then((ingredients: IngredientInstance) => {

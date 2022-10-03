@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const auth = require('../../auth/auth');
-const { IngredientModel, CategoryModel } = require('../../database/dbInit');
+const { IngredientModel, CategoryModel, MeasureModel } = require('../../database/dbInit');
 module.exports = (app) => {
     app.get('/api/ingredients', auth, (req, res) => {
         if (req.query.category) {
@@ -30,6 +30,16 @@ module.exports = (app) => {
             attributes: [
                 'id',
                 'name',
+            ],
+            include: [
+                {
+                    model: CategoryModel,
+                    attributs: ['id', 'name']
+                },
+                {
+                    model: MeasureModel,
+                    attributs: ['id', 'name']
+                }
             ]
         })
             .then((ingredients) => {

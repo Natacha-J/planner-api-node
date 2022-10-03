@@ -1,10 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const cors = require('cors');
 const db = require('./database/dbInit');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
-app.use(express.json());
+app
+    .use(express.json())
+    .use(cors());
 db.initDb();
 app.get('/api', (req, res) => {
     const msg = `Bienvenue dans l'api`;

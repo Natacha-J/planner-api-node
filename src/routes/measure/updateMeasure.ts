@@ -6,7 +6,7 @@ const { collectErrors } = require('../../helpers/errorsTab')
 const { MeasureModel } = require('../../database/dbInit')
 
 module.exports = (app: Express) => {
-    app.put('/api/categories/:id', auth, (req: Request, res: Response) => {
+    app.put('/api/measures/:id', auth, (req: Request, res: Response) => {
         MeasureModel.update(req.body, {
             where: {
                 id: req.params.id

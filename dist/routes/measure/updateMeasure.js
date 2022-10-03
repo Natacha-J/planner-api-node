@@ -5,7 +5,7 @@ const sequelize_1 = require("sequelize");
 const { collectErrors } = require('../../helpers/errorsTab');
 const { MeasureModel } = require('../../database/dbInit');
 module.exports = (app) => {
-    app.put('/api/categories/:id', auth, (req, res) => {
+    app.put('/api/measures/:id', auth, (req, res) => {
         MeasureModel.update(req.body, {
             where: {
                 id: req.params.id

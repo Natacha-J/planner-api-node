@@ -15,10 +15,6 @@ const UserModel = require('./models/user')
 
 //datas initialization
 const { users } = require('./datasInit') 
-/* const { ingredients } = require('./datasInit')
-const { categories } = require('./datasInit')
-const { recipes } = require('./datasInit')
-const { measures } = require('./datasInit')*/
 
 //transition tables
 const RecipeIngredients = sequelize.define('RecipeIngredients', {
@@ -123,8 +119,8 @@ ShoppingListModel.belongsToMany(IngredientModel, {
 ShoppingListModel.belongsTo(UserModel)
 
 const initDb = () => {
-    return sequelize.sync(/* {force: true} */)
-    .then(() => {
+    return sequelize.sync()
+/*     .then(() => {
         users.map((user: UserInstance) => {
             bcrypt.hash(user.password, 10)
             .then((hash: string) => {
@@ -132,51 +128,6 @@ const initDb = () => {
                     pseudo: user.pseudo,
                     email: user.email,
                     password: hash
-                })
-            })
-        })
-    })
-/*      .then(() => {
-        measures.map((measure: MeasureInstance) => {
-            MeasureModel.create({
-                name: measure.name
-            })
-        })
-    })
-    .then(() => {
-        categories.map((category: CategoryInstance) => {
-            CategoryModel.create({
-                name: category.name
-            })
-        })
-    })
-    .finally(() => {
-        ingredients.map((ingredient: IngredientInstance) => {
-            IngredientModel.create({
-                name: ingredient.name,
-                CategoryId: ingredient.CategoryId,
-                MeasureId: ingredient.MeasureId
-            })
-        })
-    }) */
-/*     .finally(() => {
-        recipes.map((recipe: any) => {
-            RecipeModel.create({
-                title: recipe.title,
-                UserId: recipe.UserId
-            })
-            .then((data: any) => {
-                recipes.map((recipe:any) => {
-                    if (data.title === recipe.title) {
-                        recipe.ingredients.map((ingredient:any) => {
-                            RecipeIngredients.create({ 
-                                quantity: ingredient.quantity,
-                                IngredientId: ingredient.IngredientId,
-                                RecipeId: data.id
-                            })
-
-                        })
-                    }
                 })
             })
         })
