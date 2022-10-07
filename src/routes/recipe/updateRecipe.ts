@@ -47,7 +47,7 @@ module.exports = (app: Express) => {
             .then((recipe: RecipeInstance) => {
                 if(recipe === null){
                     const msg = `La recette ${ req.params.id } n'existe pas.`;
-                    return res.status(404).send({ msg: msg });
+                    return res.status(404).send({ error: msg });
                 }
                 const msg = `La recette ${ recipe.title } a bien été modifiée.`;
                 res.send({ msg: msg, recipe: {
@@ -59,10 +59,10 @@ module.exports = (app: Express) => {
         .catch((err : Error) => {
             if( err instanceof ValidationError){
                 const errorsTab = collectErrors(err)
-                return res.status(400).send({ msg: errorsTab });
+                return res.status(400).send({ error: errorsTab });
             }
             const msg = `Une erreur est survenue : ${ err }`;
-            res.status(500).send({ msg: msg });
+            res.status(500).send({ error: msg });
         })
     })
 }

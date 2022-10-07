@@ -8,13 +8,14 @@ module.exports = (app: Express) => {
         .then((category: CategoryInstance) => {
             if (category === null) {
                 const msg = `Il n'y a pas de catégorie à afficher.`;
-                return res.status(404).send({ msg: msg });
+                return res.status(404).send({ error: msg });
             }
             const msg = `Voici la liste des catégories.`
             res.send({ msg: msg, category: category })
         })
         .catch((err: Error) => {
-            res.status(500).send({ msg: `Une erreur est survenue : ${ err }`});
+            const msg = `Une erreur est survenue : ${ err }`
+            res.status(500).send({ error: msg});
         })
 
     })
