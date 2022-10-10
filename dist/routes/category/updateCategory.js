@@ -16,7 +16,7 @@ module.exports = (app) => {
                 .then((category) => {
                 if (category === null) {
                     const msg = `La catégorie ${req.params.id} n'existe pas.`;
-                    return res.status(404).send({ msg: msg });
+                    return res.status(404).send({ error: msg });
                 }
                 const msg = `La catégorie ${category.name} a bien été modifiée.`;
                 res.send({ msg: msg, category: category });
@@ -25,10 +25,10 @@ module.exports = (app) => {
             .catch((err) => {
             if (err instanceof sequelize_1.ValidationError) {
                 const errorsTab = collectErrors(err);
-                return res.status(400).send({ msg: errorsTab });
+                return res.status(400).send({ error: errorsTab });
             }
             const msg = `Une erreur est survenue : ${err}`;
-            res.status(500).send({ msg: msg });
+            res.status(500).send({ error: msg });
         });
     });
 };

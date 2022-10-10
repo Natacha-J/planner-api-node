@@ -16,31 +16,23 @@ module.exports = (app) => {
                 .then((ingredient) => {
                 if (ingredient === null) {
                     const msg = `L'ingrédient ${req.params.id} n'existe pas.`;
-                    return res.status(404).send({ msg: msg });
+                    return res.status(404).send({ error: msg });
                 }
                 const msg = `L'ingrédient ${ingredient.name} a bien été modifiée.`;
-                res.send({
-                    msg: msg,
-                    ingredient: {
-                        id: ingredient.id,
-                        name: ingredient.name,
-                        CategoryId: ingredient.CategoryId,
-                        MeasureId: ingredient.MeasureId
-                    }
-                });
+                res.send({ msg: msg, ingredient: ingredient });
             });
         })
             .catch((err) => {
             if (err instanceof sequelize_1.ValidationError) {
                 const errorsTab = collectErrors(err);
-                return res.status(400).send({ msg: errorsTab });
+                return res.status(400).send({ error: errorsTab });
             }
             if (err instanceof sequelize_1.ForeignKeyConstraintError) {
                 const errorsTab = collectErrors(err);
-                return res.status(400).send({ msg: errorsTab });
+                return res.status(400).send({ error: errorsTab });
             }
             const msg = `Une erreur est survenue : ${err}`;
-            res.status(500).send({ msg: msg });
+            res.status(500).send({ error: msg });
         });
     });
 };

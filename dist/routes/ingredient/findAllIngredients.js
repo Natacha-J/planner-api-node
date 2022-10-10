@@ -20,7 +20,7 @@ module.exports = (app) => {
                 .then((ingredients) => {
                 if (ingredients.length === 0) {
                     const msg = `Il n'y a aucun ingrédient dans la catégorie ${req.query.category}.`;
-                    return res.status(404).send({ msg: msg });
+                    return res.status(404).send({ error: msg });
                 }
                 const msg = `Voici la liste des ingrédients de la catégorie ${req.query.category}.`;
                 res.send({ msg: msg, ingredients: ingredients });
@@ -48,7 +48,7 @@ module.exports = (app) => {
         })
             .catch((err) => {
             const msg = `Une erreur est survenue : ${err}`;
-            res.status(500).send({ msg: msg });
+            res.status(500).send({ error: msg });
         });
     });
 };

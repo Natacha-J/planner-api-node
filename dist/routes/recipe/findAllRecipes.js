@@ -30,13 +30,14 @@ module.exports = (app) => {
             .then((recipes) => {
             if (recipes.length === 0) {
                 const msg = `Il n'y a pas de recettes à afficher.`;
-                return res.status(404).send({ msg: msg });
+                return res.status(404).send({ error: msg });
             }
             const msg = `Voici la liste des recettes.`;
             res.send({ msg: msg, recipes: recipes });
         })
             .catch((err) => {
-            res.status(500).send({ msg: `Une erreur est survenue : ${err}` });
+            const msg = `Une erreur est survenue : ${err}`;
+            res.status(500).send({ error: msg });
         });
     });
 };

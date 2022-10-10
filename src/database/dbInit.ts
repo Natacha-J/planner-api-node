@@ -1,7 +1,7 @@
 import sequelize  from './dbAccess'
 const bcrypt = require('bcrypt')
 import { DataTypes } from 'sequelize'
-import { CategoryInstance, IngredientInstance, MeasureInstance, RecipeInstance, UserInstance } from '../types/modelsType';
+import { CategoryInstance, DayInstance, IngredientInstance, MeasureInstance, RecipeInstance, TypeMealInstance, UserInstance, WeekInstance } from '../types/modelsType';
 
 //model init
 const RecipeModel = require('./models/recipe');
@@ -11,10 +11,17 @@ const MeasureModel = require('./models/measure')
 const StockModel = require('./models/stock')
 const ShoppingListModel = require('./models/shoppingList')
 const UserModel = require('./models/user')
-
+const DayModel = require('./models/day')
+const TypeMealModel = require('./models/typeMeal')
+const WeekModel = require('./models/week')
+const MealModel = require('./models/meal')
 
 //datas initialization
 const { users } = require('./datasInit') 
+const { days } = require('./datasInit')
+const { typeMeals } =require('./datasInit')
+const { weeks } = require('./datasInit')
+const { categories } = require('./datasInit')
 
 //transition tables
 const RecipeIngredients = sequelize.define('RecipeIngredients', {
@@ -51,6 +58,18 @@ const StockIngredients = sequelize.define('StockIngredients', {
     }    
 }, { timestamps: false })
 
+const MealIngredients = sequelize.define('MealIngredients', {
+    quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+            notNull: { msg: `Une quantité est obligatoire.` }
+        }
+    }
+}, { timestamps: false })
+
+const MealRecipes = sequelize.define('MealRecipes', {}, { timestamps: false})
+
 //**entities associations**//
 //Recipes associations
 RecipeModel.belongsToMany(IngredientModel, {
@@ -64,6 +83,9 @@ RecipeModel.belongsTo(UserModel, {
             notNull: { msg : `Une recette doit avoir un auteur.`}
         }
     }
+})
+RecipeModel.belongsToMany(MealModel, {
+    through: 'MealRecipes'
 })
 
 //Ingredient associations
@@ -94,6 +116,9 @@ IngredientModel.belongsToMany(StockModel, {
 IngredientModel.belongsToMany(ShoppingListModel, {
     through: 'ShoppingListIngredients',
 })
+IngredientModel.belongsToMany(MealModel, {
+    through: 'MealIngredients'
+})
 
 //Category association
 CategoryModel.hasMany(IngredientModel)
@@ -118,10 +143,58 @@ ShoppingListModel.belongsToMany(IngredientModel, {
 })
 ShoppingListModel.belongsTo(UserModel)
 
+//Day association
+DayModel.hasMany(MealModel)
+
+//TypeMeal association
+TypeMealModel.hasMany(MealModel)
+
+//Week association
+WeekModel.hasMany(MealModel)
+ 
+//Meal associations
+MealModel.belongsTo(DayModel)
+MealModel.belongsTo(TypeMealModel)
+MealModel.belongsTo(WeekModel)
+MealModel.belongsToMany(IngredientModel, {
+    through: 'MealIngredients'
+})
+MealModel.belongsToMany(RecipeModel, {
+    through: 'MealRecipes'
+})
+
 const initDb = () => {
-    return sequelize.sync()
-/*     .then(() => {
-        users.map((user: UserInstance) => {
+    return sequelize.sync({force: true})
+    .then(() => {
+        days.map((day: DayInstance) => {
+            DayModel.create({
+                name: day.name
+            })
+        })
+    })
+    .then(() => {
+        typeMeals.map((type: TypeMealInstance) => {
+            TypeMealModel.create({
+                name: type.name
+            })
+        })
+    })
+    .then(() => {
+        weeks.map((week: WeekInstance) => {
+            WeekModel.create({
+                name: week.name
+            })
+        })
+    })
+    .then(() => {
+        categories.map((category: CategoryInstance) => {
+            CategoryModel.create({
+                name: category.name
+            })
+        })
+    })
+   .then(() => {
+       users.map((user: UserInstance) => {
             bcrypt.hash(user.password, 10)
             .then((hash: string) => {
                 UserModel.create({
@@ -131,7 +204,24 @@ const initDb = () => {
                 })
             })
         })
-    }) */
-}
+    })
+} 
 
-module.exports = { initDb, RecipeModel, IngredientModel, CategoryModel, MeasureModel, StockModel, ShoppingListModel, UserModel, RecipeIngredients, StockIngredients, ShoppingListIngredients}
+module.exports = { 
+    initDb,
+    RecipeModel,
+    IngredientModel,
+    CategoryModel,
+    MeasureModel,
+    StockModel,
+    ShoppingListModel,
+    UserModel,
+    DayModel,
+    TypeMealModel,
+    WeekModel,
+    MealModel,
+    RecipeIngredients,
+    StockIngredients,
+    ShoppingListIngredients,
+    MealIngredients
+}

@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
         logging: false
     })
 } else {
-    sequelize = new Sequelize('planner-bis', 'root', '', {
+    sequelize = new Sequelize('planner', 'root', '', {
         host: 'localhost',
         dialect: 'mariadb',
         dialectOptions: {

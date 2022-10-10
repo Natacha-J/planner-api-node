@@ -17,7 +17,7 @@ module.exports = (app) => {
         })
             .catch((err) => {
             const msg = `Une erreur est survenue : ${err}`;
-            res.status(500).send({ msg: msg });
+            res.status(500).send({ error: msg });
         });
     });
 };
