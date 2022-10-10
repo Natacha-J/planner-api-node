@@ -49,6 +49,17 @@ require('./routes/user/updateUser')(app);
 require('./routes/stock/createStock')(app);
 require('./routes/stock/deleteStock')(app);
 require('./routes/stock/findByPkStock')(app);
+// Meal endpoints
+require('./routes/meal/createMeal')(app);
+require('./routes/meal/findAllMeals')(app);
+require('./routes/meal/updateMeal')(app);
+require('./routes/meal/deleteMeal')(app);
+// Day endpoint
+require('./routes/day/findAllDays')(app);
+// TypeMeal endpoint
+require('./routes/typeMeal/findAllTypeMeal')(app);
+// Week endpoint
+require('./routes/week/findAllWeeks')(app);
 //login endpoint
 require('./routes/login')(app);
 app.listen(port, () => console.log(`serveur démarré sur le port ${port}`));

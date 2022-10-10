@@ -170,23 +170,23 @@ const initDb = () => {
     })
         .then(() => {
         categories.map((category) => {
-            WeekModel.create({
+            CategoryModel.create({
                 name: category.name
             });
         });
+    })
+        .then(() => {
+        users.map((user) => {
+            bcrypt.hash(user.password, 10)
+                .then((hash) => {
+                UserModel.create({
+                    pseudo: user.pseudo,
+                    email: user.email,
+                    password: hash
+                });
+            });
+        });
     });
-    /*    .then(() => {
-           users.map((user: UserInstance) => {
-                bcrypt.hash(user.password, 10)
-                .then((hash: string) => {
-                    UserModel.create({
-                        pseudo: user.pseudo,
-                        email: user.email,
-                        password: hash
-                    })
-                })
-            })
-        }) */
 };
 module.exports = {
     initDb,
@@ -200,6 +200,7 @@ module.exports = {
     DayModel,
     TypeMealModel,
     WeekModel,
+    MealModel,
     RecipeIngredients,
     StockIngredients,
     ShoppingListIngredients,

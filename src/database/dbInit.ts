@@ -164,7 +164,7 @@ MealModel.belongsToMany(RecipeModel, {
 })
 
 const initDb = () => {
-    return sequelize.sync()
+    return sequelize.sync({force: true})
     .then(() => {
         days.map((day: DayInstance) => {
             DayModel.create({
@@ -188,12 +188,12 @@ const initDb = () => {
     })
     .then(() => {
         categories.map((category: CategoryInstance) => {
-            WeekModel.create({
+            CategoryModel.create({
                 name: category.name
             })
         })
     })
-/*    .then(() => {
+   .then(() => {
        users.map((user: UserInstance) => {
             bcrypt.hash(user.password, 10)
             .then((hash: string) => {
@@ -204,7 +204,7 @@ const initDb = () => {
                 })
             })
         })
-    }) */
+    })
 } 
 
 module.exports = { 
@@ -219,6 +219,7 @@ module.exports = {
     DayModel,
     TypeMealModel,
     WeekModel,
+    MealModel,
     RecipeIngredients,
     StockIngredients,
     ShoppingListIngredients,
