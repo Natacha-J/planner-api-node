@@ -22,7 +22,6 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-
 sequelize.authenticate()
     .then( () => console.log('connexion réussie'))
     .catch( (err: Error) => console.log(`connexion échouée : ${ err }`))
