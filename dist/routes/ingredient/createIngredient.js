@@ -22,14 +22,14 @@ module.exports = (app) => {
             .catch((err) => {
             if (err instanceof sequelize_1.ValidationError) {
                 const errorsTab = collectErrors(err);
-                return res.status(400).send({ msg: errorsTab });
+                return res.status(400).send({ error: errorsTab });
             }
             if (err instanceof sequelize_1.ForeignKeyConstraintError) {
                 const errorsTab = collectErrors(err);
-                return res.status(400).send({ msg: errorsTab });
+                return res.status(400).send({ error: errorsTab });
             }
             const msg = `Une erreur est survenue : ${err}`;
-            res.status(500).send({ msg: msg });
+            res.status(500).send({ error: msg });
         });
     });
 };

@@ -8,7 +8,7 @@ module.exports = (app) => {
     app.post('/api/recipes', auth, (req, res) => {
         if (req.body.ingredients === undefined || req.body.ingredients.lenght === 0) {
             const msg = `Vous devez renseigner au moins un ingrédient pour enregitrer la recette.`;
-            return res.status(400).send({ msg: msg });
+            return res.status(400).send({ error: msg });
         }
         RecipeModel.create({
             title: req.body.title,
@@ -28,14 +28,14 @@ module.exports = (app) => {
             .catch((err) => {
             if (err instanceof sequelize_1.ValidationError) {
                 const errorsTab = collectErrors(err);
-                return res.status(400).send({ msg: errorsTab });
+                return res.status(400).send({ error: errorsTab });
             }
             else if (err instanceof sequelize_1.ForeignKeyConstraintError) {
                 const errorsTab = collectErrors(err);
-                return res.status(400).send({ msg: errorsTab });
+                return res.status(400).send({ error: errorsTab });
             }
             const msg = `Une erreur est survenue : ${err}`;
-            res.status(500).send({ msg: msg });
+            res.status(500).send({ error: msg });
         });
     });
 };

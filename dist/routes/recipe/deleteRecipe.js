@@ -8,7 +8,7 @@ module.exports = (app) => {
             .then((recipe) => {
             if (recipe === null) {
                 const msg = `La recette ${req.params.id} n'existe pas.`;
-                return res.status(404).send({ msg: msg });
+                return res.status(404).send({ error: msg });
             }
             RecipeModel.destroy({
                 where: {
@@ -17,12 +17,12 @@ module.exports = (app) => {
             })
                 .then(() => {
                 const msg = `La recette ${recipe.title} a bien été supprimée.`;
-                res.send({ msg: msg, recipe: { id: recipe.id, title: recipe.title } });
+                res.send({ msg: msg, recipe: recipe });
             });
         })
             .catch((err) => {
             const msg = `Une erreur est survenue : ${err}`;
-            res.status(500).send({ msg: msg });
+            res.status(500).send({ error: msg });
         });
     });
 };

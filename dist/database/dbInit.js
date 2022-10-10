@@ -11,8 +11,16 @@ const MeasureModel = require('./models/measure');
 const StockModel = require('./models/stock');
 const ShoppingListModel = require('./models/shoppingList');
 const UserModel = require('./models/user');
+const DayModel = require('./models/day');
+const TypeMealModel = require('./models/typeMeal');
+const WeekModel = require('./models/week');
+const MealModel = require('./models/meal');
 //datas initialization
 const { users } = require('./datasInit');
+const { days } = require('./datasInit');
+const { typeMeals } = require('./datasInit');
+const { weeks } = require('./datasInit');
+const { categories } = require('./datasInit');
 //transition tables
 const RecipeIngredients = dbAccess_1.default.define('RecipeIngredients', {
     quantity: {
@@ -45,6 +53,16 @@ const StockIngredients = dbAccess_1.default.define('StockIngredients', {
         }
     }
 }, { timestamps: false });
+const MealIngredients = dbAccess_1.default.define('MealIngredients', {
+    quantity: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+            notNull: { msg: `Une quantité est obligatoire.` }
+        }
+    }
+}, { timestamps: false });
+const MealRecipes = dbAccess_1.default.define('MealRecipes', {}, { timestamps: false });
 //**entities associations**//
 //Recipes associations
 RecipeModel.belongsToMany(IngredientModel, {
@@ -58,6 +76,9 @@ RecipeModel.belongsTo(UserModel, {
             notNull: { msg: `Une recette doit avoir un auteur.` }
         }
     }
+});
+RecipeModel.belongsToMany(MealModel, {
+    through: 'MealRecipes'
 });
 //Ingredient associations
 IngredientModel.belongsToMany(RecipeModel, {
@@ -87,6 +108,9 @@ IngredientModel.belongsToMany(StockModel, {
 IngredientModel.belongsToMany(ShoppingListModel, {
     through: 'ShoppingListIngredients',
 });
+IngredientModel.belongsToMany(MealModel, {
+    through: 'MealIngredients'
+});
 //Category association
 CategoryModel.hasMany(IngredientModel);
 //User associations
@@ -105,10 +129,54 @@ ShoppingListModel.belongsToMany(IngredientModel, {
     through: 'ShoppingListIngredients',
 });
 ShoppingListModel.belongsTo(UserModel);
+//Day association
+DayModel.hasMany(MealModel);
+//TypeMeal association
+TypeMealModel.hasMany(MealModel);
+//Week association
+WeekModel.hasMany(MealModel);
+//Meal associations
+MealModel.belongsTo(DayModel);
+MealModel.belongsTo(TypeMealModel);
+MealModel.belongsTo(WeekModel);
+MealModel.belongsToMany(IngredientModel, {
+    through: 'MealIngredients'
+});
+MealModel.belongsToMany(RecipeModel, {
+    through: 'MealRecipes'
+});
 const initDb = () => {
-    return dbAccess_1.default.sync();
-    /*     .then(() => {
-            users.map((user: UserInstance) => {
+    return dbAccess_1.default.sync({ force: true })
+        .then(() => {
+        days.map((day) => {
+            DayModel.create({
+                name: day.name
+            });
+        });
+    })
+        .then(() => {
+        typeMeals.map((type) => {
+            TypeMealModel.create({
+                name: type.name
+            });
+        });
+    })
+        .then(() => {
+        weeks.map((week) => {
+            WeekModel.create({
+                name: week.name
+            });
+        });
+    })
+        .then(() => {
+        categories.map((category) => {
+            WeekModel.create({
+                name: category.name
+            });
+        });
+    });
+    /*    .then(() => {
+           users.map((user: UserInstance) => {
                 bcrypt.hash(user.password, 10)
                 .then((hash: string) => {
                     UserModel.create({
@@ -120,4 +188,20 @@ const initDb = () => {
             })
         }) */
 };
-module.exports = { initDb, RecipeModel, IngredientModel, CategoryModel, MeasureModel, StockModel, ShoppingListModel, UserModel, RecipeIngredients, StockIngredients, ShoppingListIngredients };
+module.exports = {
+    initDb,
+    RecipeModel,
+    IngredientModel,
+    CategoryModel,
+    MeasureModel,
+    StockModel,
+    ShoppingListModel,
+    UserModel,
+    DayModel,
+    TypeMealModel,
+    WeekModel,
+    RecipeIngredients,
+    StockIngredients,
+    ShoppingListIngredients,
+    MealIngredients
+};

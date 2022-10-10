@@ -21,7 +21,7 @@ module.exports = (app) => {
             .then((lists) => {
             if (lists === null) {
                 const msg = `Il n'y a pas de liste de course.`;
-                return res.status(400).send({ msg: msg });
+                return res.status(400).send({ error: msg });
             }
             const msg = `Voici la liste de courses ${req.params.id}.`;
             return res.send({ msg: msg, shoppingList: lists });
@@ -29,10 +29,10 @@ module.exports = (app) => {
             .catch((err) => {
             if (err instanceof sequelize_1.ValidationError) {
                 const errorsTab = collectErrors(err);
-                return res.status(400).send({ msg: errorsTab });
+                return res.status(400).send({ error: errorsTab });
             }
             const msg = `Une erreur est survenue : ${err}`;
-            res.status(500).send({ msg: msg });
+            res.status(500).send({ error: msg });
         });
     });
 };
