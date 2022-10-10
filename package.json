@@ -19,6 +19,9 @@
     "mariadb": "^3.0.1",
     "sequelize": "^6.23.0"
   },
+  "engines": {
+    "node": "16.x"
+  },
   "devDependencies": {
     "@types/express": "^4.17.14",
     "@types/node": "^18.7.18",
