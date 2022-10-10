@@ -146,35 +146,35 @@ MealModel.belongsToMany(RecipeModel, {
     through: 'MealRecipes'
 });
 const initDb = () => {
-    return dbAccess_1.default.sync()
+    return dbAccess_1.default.sync();
+    /*     .then(() => {
+            days.map((day: DayInstance) => {
+                DayModel.create({
+                    name: day.name
+                })
+            })
+        })
         .then(() => {
-        days.map((day) => {
-            DayModel.create({
-                name: day.name
-            });
-        });
-    })
+            typeMeals.map((type: TypeMealInstance) => {
+                TypeMealModel.create({
+                    name: type.name
+                })
+            })
+        })
         .then(() => {
-        typeMeals.map((type) => {
-            TypeMealModel.create({
-                name: type.name
-            });
-        });
-    })
+            weeks.map((week: WeekInstance) => {
+                WeekModel.create({
+                    name: week.name
+                })
+            })
+        })
         .then(() => {
-        weeks.map((week) => {
-            WeekModel.create({
-                name: week.name
-            });
-        });
-    })
-        .then(() => {
-        categories.map((category) => {
-            CategoryModel.create({
-                name: category.name
-            });
-        });
-    });
+            categories.map((category: CategoryInstance) => {
+                CategoryModel.create({
+                    name: category.name
+                })
+            })
+        }) */
     /*    .then(() => {
            users.map((user: UserInstance) => {
                 bcrypt.hash(user.password, 10)

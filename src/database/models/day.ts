@@ -1,5 +1,5 @@
-import { DayInstance } from "../../types/modelsType";
-import sequelize from "../dbAccess";
+import { DayInstance } from "../../types/modelsType"
+import sequelize from "../dbAccess"
 import { DataTypes } from 'sequelize'
 
 const Day = sequelize.define<DayInstance>(
