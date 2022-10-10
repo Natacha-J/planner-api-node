@@ -146,7 +146,7 @@ MealModel.belongsToMany(RecipeModel, {
     through: 'MealRecipes'
 });
 const initDb = () => {
-    return dbAccess_1.default.sync({ force: true })
+    return dbAccess_1.default.sync()
         .then(() => {
         days.map((day) => {
             DayModel.create({
@@ -174,19 +174,19 @@ const initDb = () => {
                 name: category.name
             });
         });
-    })
-        .then(() => {
-        users.map((user) => {
-            bcrypt.hash(user.password, 10)
-                .then((hash) => {
-                UserModel.create({
-                    pseudo: user.pseudo,
-                    email: user.email,
-                    password: hash
-                });
-            });
-        });
     });
+    /*    .then(() => {
+           users.map((user: UserInstance) => {
+                bcrypt.hash(user.password, 10)
+                .then((hash: string) => {
+                    UserModel.create({
+                        pseudo: user.pseudo,
+                        email: user.email,
+                        password: hash
+                    })
+                })
+            })
+        }) */
 };
 module.exports = {
     initDb,

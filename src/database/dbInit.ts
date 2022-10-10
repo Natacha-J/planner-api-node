@@ -164,7 +164,7 @@ MealModel.belongsToMany(RecipeModel, {
 })
 
 const initDb = () => {
-    return sequelize.sync({force: true})
+    return sequelize.sync()
     .then(() => {
         days.map((day: DayInstance) => {
             DayModel.create({
@@ -193,7 +193,7 @@ const initDb = () => {
             })
         })
     })
-   .then(() => {
+/*    .then(() => {
        users.map((user: UserInstance) => {
             bcrypt.hash(user.password, 10)
             .then((hash: string) => {
@@ -204,7 +204,7 @@ const initDb = () => {
                 })
             })
         })
-    })
+    }) */
 } 
 
 module.exports = { 
