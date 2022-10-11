@@ -99,6 +99,61 @@ interface UserInstance extends Model<UserAttributes, UserCreationAttributes>,
         ShoppingListId: number,
         StockId: number
     }
+
+//Day Model
+interface DayAttributes {
+    id: number,
+    name: string
+}
+interface DayCreationAttributes extends Optional<DayAttributes, 'id'> {}
+
+interface DayInstance extends Model<DayAttributes, DayCreationAttributes>,
+    DayAttributes {
+        createdAt?: Date,
+        updatedAt?: Date
+    }
+
+//TypeMeal Model
+interface TypeMealAttributes {
+    id: number,
+    name: string
+}
+interface TypeMealCreationAttributes extends Optional<TypeMealAttributes, 'id'> {}
+
+interface TypeMealInstance extends Model<TypeMealAttributes, TypeMealCreationAttributes>,
+    TypeMealAttributes {
+        createdAt?: Date,
+        updatedAt?: Date
+    }
+
+//Week Model
+interface WeekAttributes {
+    id: number,
+    name: string
+}
+interface WeekCreationAttributes extends Optional<WeekAttributes, 'id'> {}
+
+interface WeekInstance extends Model<WeekAttributes, WeekCreationAttributes>,
+    WeekAttributes {
+        createdAt?: Date,
+        updatedAt?: Date
+    }
+
+//Meal Model
+interface MealAttributes {
+    id: number,
+}
+interface MealCreationAttributes extends Optional<MealAttributes, 'id'> {}
+
+interface MealInstance extends Model<MealAttributes, MealCreationAttributes>,
+    MealAttributes {
+        DayId: number,
+        TypeMealId: number,
+        WeekId: number,
+        createdAt?: Date,
+        updatedAt?: Date
+    }
+
 //**associations tables**/
 //RecipeIngredients Model
 interface RecipeIngredientsAttributes {
@@ -144,6 +199,10 @@ export {
     StockInstance,
     ShoppingListInstance,
     UserInstance,
+    DayInstance,
+    TypeMealInstance,
+    WeekInstance,
+    MealInstance,
     ShoppingListIngredientsInstance,
     StockIngredientsInstance
 }
