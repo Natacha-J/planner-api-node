@@ -15,14 +15,14 @@ module.exports = (app: Express) => {
         .then((user: UserInstance) => {
             if(!user){
                 const msg = `L'utilisateur ${ req.body.pseudo } n'existe pas.`
-                return res.status(400).send({ msg: msg })
+                return res.status(400).send({ error: msg })
             }
             
             bcrypt.compare(req.body.password, user.password)
             .then((isPasswordValid: boolean)=> {
                 if(!isPasswordValid){
                     const msg = `Le mot de passe est incorrect.`
-                    return res.status(400).send({ msg: msg })
+                    return res.status(400).send({ error: msg })
                 }
                 //JWT
                 const token = jwt.sign(
@@ -36,7 +36,7 @@ module.exports = (app: Express) => {
         })
         .catch((err : Error) => {
             const msg = `Une erreur est survenue : ${ err }`;
-            res.status(500).send({ msg: msg });
+            res.status(500).send({ error: msg });
         })
     })
 }

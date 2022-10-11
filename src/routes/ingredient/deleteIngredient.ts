@@ -9,7 +9,7 @@ module.exports = (app: Express) => {
         .then((ingredient: IngredientInstance) => {
             if(ingredient === null){
                 const msg = `L'ingrédient ${ req.params.id } n'existe pas.`;
-                return res.status(404).send({ msg: msg });
+                return res.status(404).send({ error: msg });
             }
             IngredientModel.destroy({
                 where: {
@@ -30,7 +30,7 @@ module.exports = (app: Express) => {
             })
             .catch((err: Error) => {
                 const msg = `Une erreur est survenue : ${ err }`;
-                res.status(500).send({ msg: msg });            
+                res.status(500).send({ error: msg });            
             })
         })
     })

@@ -25,13 +25,14 @@ module.exports = (app: Express) => {
         .then((user: UserInstance) => {
             if (user === null) {
                 const msg = `Il n'y a pas d'utilisateur avec l'identifiant ${ req.params.id }.`;
-                return res.status(404).send({ msg: msg });
+                return res.status(404).send({ error: msg });
             }
             const msg = `Voici l'utilisateur ${ req.params.id }.`
             res.send({ msg: msg, user: user })
         })
         .catch((err: Error) => {
-            res.status(500).send({ msg: `Une erreur est survenue : ${ err }`});
+            const msg = `Une erreur est survenue : ${ err }`
+            res.status(500).send({ error: msg });
         })
     })
 }

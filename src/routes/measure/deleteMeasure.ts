@@ -9,7 +9,7 @@ module.exports = (app: Express) => {
         .then((measure: MeasureInstance) => {
             if(measure === null){
                 const msg = `L'unité de mesure ${req.params.id} n'existe pas.`;
-                return res.status(404).send({ msg: msg });
+                return res.status(404).send({ error: msg });
             }
             MeasureModel.destroy({
                 where: {
@@ -24,7 +24,7 @@ module.exports = (app: Express) => {
         })
         .catch((err: Error) => {
             const msg = `Une erreur est survenue : ${ err }`;
-            res.status(500).send({ msg: msg });
+            res.status(500).send({ error: msg });
         })
     })
 }

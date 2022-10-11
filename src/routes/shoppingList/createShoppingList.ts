@@ -54,10 +54,10 @@ module.exports = (app: Express) => {
         .catch((err : Error) => {
             if( err instanceof ValidationError){
                 const errorsTab = collectErrors(err)
-                return res.status(400).send({ msg: errorsTab });
+                return res.status(400).send({ error: errorsTab });
             }
             const msg = `Une erreur est survenue : ${ err }`;
-            res.status(500).send({ msg: msg });
+            res.status(500).send({ error: msg });
         })
     })
 }
